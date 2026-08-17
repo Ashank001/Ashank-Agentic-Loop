@@ -1,0 +1,10 @@
+llm:
+  model_name: "llama-3.3-70b-versatile"
+  temperature: 0.2
+
+agent:
+  max_iterations: 10
+  token_budget_warning: 15000
+
+memory:
+  backend: "chroma"
