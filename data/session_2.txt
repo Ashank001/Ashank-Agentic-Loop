@@ -1,1 +1,4 @@
-Dave needs to write the documentation for the API by next week.
+Meeting: Project Alpha Follow-up
+
+Ashank needs to review the JWT integration by next week.
+Priya will deploy the staging build by tomorrow.

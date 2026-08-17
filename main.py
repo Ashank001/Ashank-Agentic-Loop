@@ -28,13 +28,13 @@ def main():
         return
 
     print("=====================================================")
-    print("🎬 SESSION 1: The agent doesn't know Dave's email.")
+    print("🎬 SESSION 1: First meeting — agent looks up emails.")
     print("=====================================================")
     print(f"Raw Input: {notes_1}")
     run_agent(notes_1, user_id="demo_user")
     
     print("\n\n=====================================================")
-    print("🎬 SESSION 2: The agent SHOULD remember Dave's email now!")
+    print("🎬 SESSION 2: Follow-up — agent SHOULD remember emails!")
     print("=====================================================")
     print(f"Raw Input: {notes_2}")
     run_agent(notes_2, user_id="demo_user")
