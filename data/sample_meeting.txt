@@ -1,4 +1,0 @@
-Sprint Planning Meeting - Aug 17, 2026
-
-Dave mentioned that the backend API is still throwing 500 errors. Dave needs to fix the API endpoint by next Friday. 
-Also, Sarah should review the frontend design docs tomorrow before the client call.
