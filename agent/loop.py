@@ -24,6 +24,26 @@ agent_memory = AgentMemory()
 # Global token counter for guardrails
 total_session_tokens = 0
 
+import re as _re
+
+def _extract_json(text: str) -> dict:
+    """Extract JSON from LLM output, stripping <think> tags, markdown fences, etc."""
+    # Strip thinking tags from reasoning models like Qwen
+    text = _re.sub(r'<think>.*?</think>', '', text, flags=_re.DOTALL).strip()
+    # Strip markdown code fences if present
+    text = _re.sub(r'```json\s*', '', text)
+    text = _re.sub(r'```\s*', '', text)
+    # Try parsing directly first
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+    # Fallback: find the first JSON object or array in the text
+    match = _re.search(r'(\{.*\}|\[.*\])', text, _re.DOTALL)
+    if match:
+        return json.loads(match.group(1))
+    raise ValueError(f"Could not extract JSON from LLM response: {text[:200]}")
+
 @with_backoff(max_retries=3, base_delay=2)
 def _call_llm(system_prompt: str, user_content: str) -> dict:
     global total_session_tokens
@@ -42,8 +62,15 @@ def _call_llm(system_prompt: str, user_content: str) -> dict:
     total_session_tokens += response.usage.total_tokens
     if total_session_tokens > TOKEN_WARNING_LIMIT:
         print(f'{{ "guardrail_warning": "Token budget exceeded ({total_session_tokens}/{TOKEN_WARNING_LIMIT})" }}')
-        
-    return json.loads(response.choices[0].message.content)
+    
+    raw_content = response.choices[0].message.content
+    parsed = _extract_json(raw_content)
+    
+    # Normalize: some models return a list instead of a dict
+    if isinstance(parsed, list):
+        parsed = parsed[0] if parsed and isinstance(parsed[0], dict) else {"action_items": parsed}
+    
+    return parsed
 
 def perceive(input_data: str, previous_feedback: str = None) -> dict:
     agent_logger.start_step("perceive")
@@ -116,7 +143,7 @@ def run_agent(raw_notes: str, user_id: str = "demo_user"):
         reflection = reflect(result, observation, iteration)
         
         # Guardrail: Infinite Loop Detection (STUCK)
-        current_reflection_hash = hash(reflection.get("critique", "") + reflection.get("next_instruction", ""))
+        current_reflection_hash = hash(str(reflection.get("critique", "")) + str(reflection.get("next_instruction", "")))
         if current_reflection_hash == previous_reflection_hash:
             print('{ "guardrail_trigger": "STUCK_STATE_DETECTED - Identical reflection twice. Breaking loop." }')
             observation["status"] = "STUCK"

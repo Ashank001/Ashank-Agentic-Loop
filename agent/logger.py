@@ -19,7 +19,7 @@ class AgentLogger:
         latency = round((time.time() - self.start_times.get(step_name, time.time())) * 1000, 2)
         
         log_entry = {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(tz=__import__('datetime').timezone.utc).isoformat(),
             "iteration": iteration,
             "step": step_name,
             "input_summary": str(input_data)[:200] + ("..." if len(str(input_data)) > 200 else ""),

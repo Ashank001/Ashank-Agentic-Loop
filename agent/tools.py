@@ -10,9 +10,9 @@ def lookup_team_directory(name: str, department: str = None) -> dict:
     """Mock database lookup for employees to resolve vague names."""
     # Simulated directory database
     mock_db = {
-        "ashank": {"user_id": "ashank.kumar@company.com", "role": "Backend Engineer"},
-        "rahul": {"user_id": "rahul.sharma@company.com", "role": "Security Engineer"},
-        "priya": {"user_id": "priya.nair@company.com", "role": "QA Engineer"}
+        "dave": {"user_id": "dave.miller@company.com", "role": "Backend Engineer"},
+        "alex": {"user_id": "alex.chen@company.com", "role": "DevOps"},
+        "sarah": {"user_id": "sarah.j@company.com", "role": "Product Manager"}
     }
     
     query = name.lower().strip()

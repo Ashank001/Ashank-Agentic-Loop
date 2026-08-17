@@ -28,7 +28,7 @@ If all items are perfectly resolved AND validated, output action: "COMPLETE".
 
 Output strictly in JSON format matching this structure:
 {
-    "thought": "I see task 1 belongs to Ashank. I need to look up Ashank's email.",
+    "thought": "I see task 1 belongs to Dave. I need to look up Dave's email.",
     "action": "TOOL_CALL or COMPLETE",
     "tool_name": "name of tool if TOOL_CALL",
     "tool_args": {"arg1": "value1"}

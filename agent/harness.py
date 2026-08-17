@@ -39,12 +39,12 @@ def with_backoff(max_retries=3, base_delay=1):
                     retry_after = _parse_retry_after(error_msg)
                     if retry_after and "rate_limit" in error_msg.lower():
                         delay = retry_after
-                        print(f'{{ "harness_rate_limit": "Rate limited. Waiting {delay:.0f}s as instructed by server..." }}')
+                        # print(f'{{ "harness_rate_limit": "Rate limited. Waiting {delay:.0f}s as instructed by server..." }}')
                     else:
                         # Standard jitter formula: (base_delay * 2^retry) + random milliseconds
                         delay = (base_delay * (2 ** (retries - 1))) + random.uniform(0.1, 1.0)
                         # Fallback Strategy 1: LLM returns unparseable output or times out
-                        print(f'{{ "harness_retry": "Exception in {func.__name__}: {error_msg}. Retrying in {delay:.2f}s..." }}')
+                        # print(f'{{ "harness_retry": "Exception in {func.__name__}: {error_msg}. Retrying in {delay:.2f}s..." }}')
                     
                     time.sleep(delay)
         return wrapper

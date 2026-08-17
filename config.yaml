@@ -1,10 +1,10 @@
 llm:
-  model_name: "llama-3.3-70b-versatile"
+  model_name: "openai/gpt-oss-20b"
   temperature: 0.2
 
 agent:
   max_iterations: 10
-  token_budget_warning: 15000
+  token_budget_warning: 50000
 
 memory:
   backend: "chroma"
