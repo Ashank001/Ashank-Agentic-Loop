@@ -19,7 +19,7 @@ Output strictly in JSON format matching this structure:
 
 REASON_PROMPT = """
 Analyze the current observation of action items. Your goal is to ensure EVERY action item has:
-1. A fully resolved owner email (not just a first name).
+1. A fully resolved owner email. (NEVER guess or invent an email. You MUST use the lookup_team_directory tool if you only have a first name).
 2. A concrete YYYY-MM-DD due date (not a relative date like "tomorrow").
 
 If data is missing or vague, you MUST formulate a tool call to resolve it.

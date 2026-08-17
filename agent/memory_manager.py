@@ -42,10 +42,22 @@ class AgentMemory:
     def recall(self, query: str, user_id: str = "default_user") -> list:
         """Retrieves relevant memories based on the query."""
         print(f"    [MEMORY RECALL] Searching Mem0 for: {query[:30]}...")
-        results = self.memory.search(query, user_id=user_id)
+        results = self.memory.search(query, filters={"user_id": user_id})
+        
+        # Newer mem0 versions return {"results": [...]}, unwrap if needed
+        if isinstance(results, dict) and "results" in results:
+            results = results["results"]
+        
+        if not results:
+            return []
         
         # Extract just the text from the Mem0 result objects
-        memories = [r.get('memory', '') for r in results] if results else []
+        memories = []
+        for r in results:
+            if isinstance(r, dict):
+                memories.append(r.get('memory', ''))
+            elif isinstance(r, str):
+                memories.append(r)
         return memories
 
     def clear(self, user_id: str = "default_user"):
